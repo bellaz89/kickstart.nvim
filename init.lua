@@ -969,6 +969,7 @@ require('lazy').setup({
     end,
     requires = { { 'hoob3rt/lualine.nvim', opt = true }, { 'kyazdani42/nvim-web-devicons', opt = true } },
   },
+  'tpope/vim-fugitive',
   -- Learn how to use VIM correctly by disabling anti-pattern buttons.
   {
     'm4xshen/hardtime.nvim',
