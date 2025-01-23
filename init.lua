@@ -747,12 +747,13 @@ require('lazy').setup({
         end)(),
         dependencies = {
           -- `vim-snippets` contains a variety of premade snippets in snipMate format.
-          --    See the README about individual language/framework/plugin snippets:
-          --    https://github.com/honza/vim-snippets/
+          --  See the README about individual language/framework/plugin snippets:
+          --  https://github.com/honza/vim-snippets/
           {
             'honza/vim-snippets',
             config = function()
               require('luasnip.loaders.from_snipmate').lazy_load()
+              require('luasnip.loaders.from_snipmate').lazy_load { paths = { './snippets' } }
             end,
           },
         },
