@@ -16,14 +16,14 @@ snippet head
         --     :-=-:.      .:-=-:.   .--:      :-==:        .:-=-:.      .--=-:.    :--:     ---.
         --
         ------------------------------------------------------------------------------------------
-        --! @file `Filename()`.vhd
+        --! @file `vim_snippets#Filename()`.vhd
         ------------------------------------------------------------------------------------------
-        --! @copyright Copyright `system("date +%Y")` SCK-CEN
+        --! @copyright Copyright `system("printf '%(%Y)T'")` SCK-CEN
         ------------------------------------------------------------------------------------------
-        --! @date `system("date +%d/%m/%Y")`
+        --! @date `system("printf '%(%d/%m/%Y)T'")`
         --! @author Andrea Bellandi <andrea.bellandi@sckcen.be>
         ------------------------------------------------------------------------------------------
-        --! @brief ${1:Module `Filename()`} is ${2}
+        --! @brief ${1}
         ------------------------------------------------------------------------------------------
         
         --! Use standard libs
@@ -34,6 +34,9 @@ snippet head
         --!
         library desy;
         use desy.common_types.all;
+        
+        ${2}
+
 
 # Entity template
 snippet src
@@ -52,14 +55,14 @@ snippet src
         --     :-=-:.      .:-=-:.   .--:      :-==:        .:-=-:.      .--=-:.    :--:     ---.
         --
         ------------------------------------------------------------------------------------------
-        --! @file `Filename()`.vhd
+        --! @file `vim_snippets#Filename()`.vhd
         ------------------------------------------------------------------------------------------
-        --! @copyright Copyright `system("date +%Y")` SCK-CEN
+        --! @copyright Copyright `system("printf '%(%Y)T'")` SCK-CEN
         ------------------------------------------------------------------------------------------
-        --! @date `system("date +%d/%m/%Y")`
+        --! @date `system("printf '%(%d/%m/%Y)T'")`
         --! @author Andrea Bellandi <andrea.bellandi@sckcen.be>
         ------------------------------------------------------------------------------------------
-        --! @brief Module ${1:`Filename()`} is ${2}
+        --! @brief Module ${1:`vim_snippets#Filename()`} is ${2}
         ------------------------------------------------------------------------------------------
         
         --! Use standard libs
@@ -101,8 +104,9 @@ snippet src
           -- Combinatorial logic
         end behavioral;
 
+
 # Package template
-snippet src
+snippet pkg
         ------------------------------------------------------------------------------------------
         --
         --                            ..
@@ -118,14 +122,14 @@ snippet src
         --     :-=-:.      .:-=-:.   .--:      :-==:        .:-=-:.      .--=-:.    :--:     ---.
         --
         ------------------------------------------------------------------------------------------
-        --! @file `Filename()`.vhd
+        --! @file `vim_snippets#Filename()`.vhd
         ------------------------------------------------------------------------------------------
-        --! @copyright Copyright `system("date +%Y")` SCK-CEN
+        --! @copyright Copyright `system("printf '%(%Y)T'")` SCK-CEN
         ------------------------------------------------------------------------------------------
-        --! @date `system("date +%d/%m/%Y")`
+        --! @date `system("printf '%(%d/%m/%Y)T'")`
         --! @author Andrea Bellandi <andrea.bellandi@sckcen.be>
         ------------------------------------------------------------------------------------------
-        --! @brief Package ${1:`Filename()`} is ${2}
+        --! @brief Package ${1:`vim_snippets#Filename()`} is ${2}
         ------------------------------------------------------------------------------------------
         
         --! Use standard libs
@@ -147,8 +151,9 @@ snippet src
           --! Package implementation here
         end package body;
 
-# process with clock
-snippet process
+
+# Process with clock
+snippet process_noreset
         prs_${1} : process (${2:pi_clock})
         begin
           if rising_edge ($2) then
@@ -157,7 +162,9 @@ snippet process
           end if;
         end process;
 
-# process with clock and reset
+
+
+# Process with clock and reset
 snippet process
         prs_${1} : process (${2:pi_clock})
         begin
@@ -168,3 +175,5 @@ snippet process
             ${4}
           end if;
         end process;
+
+
