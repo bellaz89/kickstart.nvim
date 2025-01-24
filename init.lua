@@ -932,15 +932,6 @@ require('lazy').setup({
   },
   -- -- Custom Plugin section
   -- Vinegar directory browser
-  {
-    'stevearc/oil.nvim',
-    -- @module 'oil
-    -- @type oil.SetupOpts
-    opts = {},
-    -- Optional dependencies
-    -- dependencies = { { 'echasnovski/mini.icons', opts = {} } },
-    dependencies = { 'nvim-tree/nvim-web-devicons' }, -- use if prefer nvim-web-devicons
-  },
 
   -- Tabline
   {
@@ -977,7 +968,7 @@ require('lazy').setup({
     'm4xshen/hardtime.nvim',
     dependencies = { 'MunifTanjim/nui.nvim' },
     opts = {
-      max_count = 5,
+      max_count = 10,
       disabled_filetypes = { 'qf', 'netrw', 'NvimTree', 'lazy', 'mason', 'oil' },
     },
   },
@@ -992,11 +983,11 @@ require('lazy').setup({
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
   -- require 'kickstart.plugins.debug',
-  -- require 'kickstart.plugins.indent_line',
-  -- require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
-  -- require 'kickstart.plugins.neo-tree',
-  -- require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
+  require 'kickstart.plugins.indent_line',
+  require 'kickstart.plugins.lint',
+  require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.neo-tree',
+  require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 
   -- NOTE: The import below can automatically add your own plugins, configuration, etc from `lua/custom/plugins/*.lua`
   --    This is the easiest way to modularize your config.
