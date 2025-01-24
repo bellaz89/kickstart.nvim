@@ -35,7 +35,6 @@ snippet head
         library desy;
         use desy.common_types.all;
         
-        ${2}
 
 
 # Entity template
@@ -76,33 +75,38 @@ snippet src
         
         --! @brief This is the description of entity $1
         entity $1 is
+          generic(
+            ${3:}
+          );
           port(
             --! Clock and reset inputs.
             pi_clock         : in std_logic;
             pi_reset         : in std_logic;
             --! Entity ports
-            ${3}
+            ${4}
           );
-        end $1;
+        end entity $1;
         
         --! @brief Architecture of $1 
         architecture behavioral of $1 is
         -- Signals and constant declaration
         begin
           -- Sequential logic
-          process(pi_clock)
-          prs_$1 : begin
+          prs_$1 : process(pi_clock)
+          begin
             if rising_edge(pi_clock) then
               if pi_reset = '1' then
                 -- Reset logic
+                ${5}
               else
                 -- Sequential statements
+                ${6}
               end if;
             end if;
-          end process;
+          end process prs_$1;
         
           -- Combinatorial logic
-        end behavioral;
+        end architecture behavioral;
 
 
 # Package template
@@ -140,7 +144,7 @@ snippet pkg
         --!
         library desy;
         use desy.common_types.all;
-        
+       
         --! Package file for this and that
         package $1 is
           --! Package definitions here
@@ -149,7 +153,8 @@ snippet pkg
         
         package body $1 is
           --! Package implementation here
-        end package body;
+          ${4}
+        end package body $1;
 
 
 # Process with clock
@@ -160,7 +165,7 @@ snippet process_noreset
             -- ! Combinatorial statements
             ${3}
           end if;
-        end process;
+        end process prs_$1;
 
 
 # Process with clock and reset
@@ -173,7 +178,7 @@ snippet process
             --! Combinatorial statements
             ${4}
           end if;
-        end process;
+        end process prs_$1;
 
 
 # Constant
@@ -195,14 +200,14 @@ snippet signal
 snippet for_loop
         lp_${1} : for ${2:i} in ${3} to ${4} loop
           ${5}
-        end loop;
+        end loop lp_$1;
 
 
 # While
 snippet while_loop
         lp_${1} : while ${2} loop
           ${3}
-        end loop;
+        end loop lp_$1;
 
 
 # Generate if
@@ -211,21 +216,61 @@ snippet if_generate
           ${3}
         ${4:else generate}
           ${5}
-        end generate; 
+        end generate gen_$1; 
 
 # Generate for
 snippet generate_for
         gen_${1} : for ${2:i} in ${3} to ${4} generate
           ${5}
-        end generate; 
+        end generate gen_$1; 
 
 # Block
 snippet block
          blk_${1} : block 
-          ${2}
+           ${2}
          begin
+           ${3}
+         end block blk_$1;
+
+# Entity
+snippet entity
+        entity ${1} is
+          generic(
+            ${2:}
+          );
+          port(
+            pi_clock         : in std_logic;
+            pi_reset         : in std_logic;
+            ${3}
+          );
+        end entity $1;
+        
+        architecture behavioral of $1 is
+        begin
+          prs_$1 : process(pi_clock)
+          begin
+            if rising_edge(pi_clock) then
+              if pi_reset = '1' then
+                ${4}
+              else
+                ${5}
+              end if;
+            end if;
+          end process prs_$1;
+        end architecture behavioral;
+
+
+# Package
+snippet package
+        package ${1} is
           ${3}
-         end block block_label;
+        end package $1;
+        
+        package body $1 is
+          ${4}
+        end package body $1;
+
+
 # Type
 snippet type
         type t_${1} is ${2};
