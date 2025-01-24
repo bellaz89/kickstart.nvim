@@ -163,7 +163,6 @@ snippet process_noreset
         end process;
 
 
-
 # Process with clock and reset
 snippet process
         prs_${1} : process (${2:pi_clock})
@@ -175,5 +174,103 @@ snippet process
             ${4}
           end if;
         end process;
+
+
+# Constant
+snippet constant
+        constant C_${1} : ${2} := ${3};
+
+
+# Variable
+snippet variable
+        variable v_${1} : ${2} := ${3};
+
+
+# Signal
+snippet signal
+        signal ${1} : ${2} := ${3};
+
+
+# Loop
+snippet for_loop
+        lp_${1} : for ${2:i} in ${3} to ${4} loop
+          ${5}
+        end loop;
+
+
+# While
+snippet while_loop
+        lp_${1} : while ${2} loop
+          ${3}
+        end loop;
+
+
+# Generate if
+snippet if_generate
+        gen_${1} : if ${2} generate
+          ${3}
+        ${4:else generate}
+          ${5}
+        end generate; 
+
+# Generate for
+snippet generate_for
+        gen_${1} : for ${2:i} in ${3} to ${4} generate
+          ${5}
+        end generate; 
+
+# Block
+snippet block
+         blk_${1} : block 
+          ${2}
+         begin
+          ${3}
+         end block block_label;
+# Type
+snippet type
+        type t_${1} is ${2};
+
+# Range
+snippet range
+        range ${1} to ${2}
+
+
+# Range unconstrained
+snippet range_unconstrained
+        range <> 
+
+
+# Array
+snippet array
+        array (range ${1} to ${2}) of ${3}
+
+
+# Array unconstrained
+snippet array_unconstrained
+        array (range <>) of ${1}
+
+
+# Function
+snippet function
+        ${1:pure} function f_${2}(${3:}) is
+          ${4}
+        begin
+          ${5}
+        end function;
+
+# Procedure 
+snippet procedure 
+        procedure prd_${1}(${2:}) is
+          ${3}
+        begin
+          ${4}
+        end procedure;
+
+
+# Instance
+snippet instance
+        ins_${1} : entity ${2}
+        generic map (${4})
+        port map (${3});
 
 
