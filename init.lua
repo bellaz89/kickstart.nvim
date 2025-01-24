@@ -720,10 +720,16 @@ require('lazy').setup({
       end,
       formatters_by_ft = {
         lua = { 'stylua' },
-        vhdl = { 'vsg' },
         python = { 'isort', 'black' },
-        --
-        -- You can use 'stop_after_first' to run the first available formatter from the list
+        yaml = { 'yamlfix' },
+        vhdl = { 'vsg' },
+        xml = { 'xmlformatter' },
+        json = { 'fixjson' },
+        bash = { 'beautysh' },
+        sh = { 'beautysh' },
+        systemverilog = { 'verible' },
+        markdown = { 'markdown-cli2' },
+        rst = { 'rstfmt' },
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
       },
     },
