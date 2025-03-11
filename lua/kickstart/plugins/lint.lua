@@ -16,6 +16,7 @@ return {
         json = { 'jsonlint' },
         rst = { 'vale' },
         yaml = { 'yamllint' },
+        tcl = { 'nagelfar' },
       }
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
