@@ -707,8 +707,7 @@ require('lazy').setup({
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
 
-        -- local disable_filetypes = { c = true, cpp = true }
-        local disable_filetypes = {}
+        local disable_filetypes = { c = true, cpp = true }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
           lsp_format_opt = 'never'
@@ -723,8 +722,8 @@ require('lazy').setup({
       formatters_by_ft = {
         markdown = { 'markdownlint' },
         vhdl = { 'vsg' },
-        cpp = { 'clang-format' },
-        c = { 'clang-format' },
+        -- cpp = { 'clang-format' },
+        -- c = { 'clang-format' },
         lua = { 'stylua' },
         python = { 'isort', 'black' },
         bash = { 'beautysh' },
@@ -739,7 +738,6 @@ require('lazy').setup({
       },
     },
   },
-
   { -- Autocompletion
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
@@ -1037,7 +1035,7 @@ require('lazy').setup({
   -- require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
-  -- require 'kickstart.plugins.autopairs',
+  require 'kickstart.plugins.autopairs',
   require 'kickstart.plugins.neo-tree',
   require 'kickstart.plugins.gitsigns', -- adds gitsigns recommend keymaps
 

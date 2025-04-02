@@ -22,6 +22,44 @@ return {
         verilog = { 'verilator' },
       }
 
+      local cppcheck = lint.linters.cppcheck
+      cppcheck.args = {
+        '--enable=all',
+        '--std=c++17',
+        '--template=gcc',
+        '--suppress=unusedFunction',
+        '--suppress=missingIncludeSystem',
+        '--suppress=unmatchedSuppression:*',
+        '--suppress=*:*spdlog\\*',
+        '--suppress=*:*catch2\\*',
+        '--suppress=*:*doctest\\*',
+        '--suppress=*:*trompeloeil\\*',
+        function()
+          if vim.bo.filetype == 'cpp' then
+            return '--language=c++'
+          else
+            return '--language=c'
+          end
+        end,
+        '--inline-suppr',
+        '--verbose',
+        '--quiet',
+        function()
+          if vim.fn.isdirectory 'build' == 1 then
+            return '--cppcheck-build-dir=build'
+          else
+            return nil
+          end
+        end,
+        '--template={file}:{line}:{column}: [{id}] {severity}: {message}',
+      }
+
+      local clangtidy = lint.linters.clangtidy
+      clangtidy.args = {
+        '--config=~/.config/clangtidy/.clang-tidy',
+        '--quiet',
+      }
+
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
       -- lint.linters_by_ft = lint.linters_by_ft or {}
