@@ -920,7 +920,8 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc' },
+      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'xml' },
+
       -- Autoinstall languages that are not installed
       auto_install = true,
       highlight = {
@@ -1083,3 +1084,11 @@ vim.api.nvim_create_user_command('LintInfo', function()
 end, {})
 -- The line beneath this is called `modeline`. See `:help modeline`
 -- vim: ts=2 sts=2 sw=2 et
+--
+
+vim.treesitter.language.register('xml', 'idf')
+vim.treesitter.language.register('xml', 'cdf')
+
+vim.cmd 'syntax enable'
+vim.cmd 'autocmd! Syntax systemrdl source ~/.config/nvim/syntax/systemrdl.vim'
+vim.cmd 'autocmd BufRead,BufNewFile *.rdl set filetype=systemrdl'
