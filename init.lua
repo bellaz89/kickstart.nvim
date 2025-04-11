@@ -1092,3 +1092,6 @@ vim.treesitter.language.register('xml', 'cdf')
 vim.cmd 'syntax enable'
 vim.cmd 'autocmd! Syntax systemrdl source ~/.config/nvim/syntax/systemrdl.vim'
 vim.cmd 'autocmd BufRead,BufNewFile *.rdl set filetype=systemrdl'
+vim.opt.tabstop = 2      -- Number of visual spaces per TAB
+vim.opt.shiftwidth = 2   -- Number of spaces to use for each step of (auto)indent
+vim.opt.expandtab = true -- Convert tabs to spaces
