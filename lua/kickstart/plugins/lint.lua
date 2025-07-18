@@ -56,7 +56,6 @@ return {
 
       local clangtidy = lint.linters.clangtidy
       clangtidy.args = {
-        '--config=~/.config/clangtidy/.clang-tidy',
         '--quiet',
       }
 

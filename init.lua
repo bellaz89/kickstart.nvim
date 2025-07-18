@@ -503,6 +503,15 @@ require('lazy').setup({
       --    That is to say, every time a new file is opened that is associated with
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
       --    function will be executed to configure the current buffer
+
+      require('lspconfig').clangd.setup {
+        cmd = { 'clangd', '--clang-tidy' }, -- Enables clang-tidy diagnostics
+        init_options = {
+          clangdFileStatus = true, -- Shows status in LSP info
+          fallbackFlags = { '-std=c++17' }, -- Optional: fallback flags
+        },
+      }
+
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -720,8 +729,8 @@ require('lazy').setup({
       formatters_by_ft = {
         markdown = { 'markdownlint' },
         vhdl = { 'vsg' },
-        -- cpp = { 'clang-format' },
-        -- c = { 'clang-format' },
+        cpp = { 'clang-format' },
+        c = { 'clang-format' },
         lua = { 'stylua' },
         python = { 'isort', 'black' },
         bash = { 'beautysh' },
@@ -919,7 +928,7 @@ require('lazy').setup({
     main = 'nvim-treesitter.configs', -- Sets main module to use for opts
     -- [[ Configure Treesitter ]] See `:help nvim-treesitter`
     opts = {
-      ensure_installed = { 'bash', 'c', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'xml' },
+      ensure_installed = { 'bash', 'c', 'cpp', 'diff', 'html', 'lua', 'luadoc', 'markdown', 'markdown_inline', 'query', 'vim', 'vimdoc', 'xml' },
 
       -- Autoinstall languages that are not installed
       auto_install = true,
@@ -981,30 +990,30 @@ require('lazy').setup({
       disabled_filetypes = { 'qf', 'netrw', 'NvimTree', 'lazy', 'mason', 'oil' },
     },
   },
-  {
-    'olimorris/codecompanion.nvim',
-    config = true,
-    dependencies = {
-      'nvim-lua/plenary.nvim',
-      'nvim-treesitter/nvim-treesitter',
-      'github/copilot.vim',
-      { 'MeanderingProgrammer/render-markdown.nvim', ft = { 'markdown', 'codecompanion' } },
-    },
-    opts = {
-      strategies = {
-        -- Change the default chat adapter
-        chat = {
-          adapter = 'copilot',
-        },
-        inline = {
-          adapter = 'copilot',
-        },
-        cmd = {
-          adapter = 'copilot',
-        },
-      },
-    },
-  },
+  -- {
+  --   'olimorris/codecompanion.nvim',
+  --   config = true,
+  --   dependencies = {
+  --     'nvim-lua/plenary.nvim',
+  --     'nvim-treesitter/nvim-treesitter',
+  --     'github/copilot.vim',
+  --     { 'MeanderingProgrammer/render-markdown.nvim', ft = { 'markdown', 'codecompanion' } },
+  --   },
+  --   opts = {
+  --     strategies = {
+  --       -- Change the default chat adapter
+  --       chat = {
+  --         adapter = 'copilot',
+  --       },
+  --       inline = {
+  --         adapter = 'copilot',
+  --       },
+  --       cmd = {
+  --         adapter = 'copilot',
+  --       },
+  --     },
+  --   },
+  -- },
   {
     'christoomey/vim-tmux-navigator',
     cmd = {
