@@ -505,7 +505,7 @@ require('lazy').setup({
       --    function will be executed to configure the current buffer
 
       require('lspconfig').clangd.setup {
-        cmd = { 'clangd', '--clang-tidy' }, -- Enables clang-tidy diagnostics
+        cmd = { 'clangd', '--clang-tidy', '--enable=config', '--pretty' }, -- Enables clang-tidy diagnostics
         init_options = {
           clangdFileStatus = true, -- Shows status in LSP info
           fallbackFlags = { '-std=c++17' }, -- Optional: fallback flags
@@ -1103,3 +1103,4 @@ vim.cmd 'autocmd BufRead,BufNewFile *.rdl set filetype=systemrdl'
 vim.opt.tabstop = 2 -- Number of visual spaces per TAB
 vim.opt.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
 vim.opt.expandtab = true -- Convert tabs to spaces
+vim.lsp.set_log_level 'debug'

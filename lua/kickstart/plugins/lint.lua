@@ -8,8 +8,8 @@ return {
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
         vhdl = { 'vsg' },
-        cpp = { 'cppcheck', 'clangtidy' },
-        c = { 'cppcheck', 'clangtidy' },
+        -- cpp = { 'cppcheck', 'clangtidy' },
+        -- c = { 'cppcheck', 'clangtidy' },
         lua = { 'luacheck' },
         python = { 'flake8' },
         bash = { 'bash' },
@@ -54,10 +54,10 @@ return {
         '--template={file}:{line}:{column}: [{id}] {severity}: {message}',
       }
 
-      local clangtidy = lint.linters.clangtidy
-      clangtidy.args = {
-        '--quiet',
-      }
+      --local clangtidy = lint.linters.clangtidy
+      --clangtidy.args = {
+      --  '--quiet',
+      --}
 
       -- To allow other plugins to add linters to require('lint').linters_by_ft,
       -- instead set linters_by_ft like this:
