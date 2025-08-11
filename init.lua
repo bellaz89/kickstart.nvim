@@ -679,6 +679,8 @@ require('lazy').setup({
       require('mason-tool-installer').setup { ensure_installed = ensure_installed }
 
       require('mason-lspconfig').setup {
+        ensure_installed = {}, -- explicitly set to an empty table (Kickstart populates installs via mason-tool-installer)
+        automatic_installation = false,
         handlers = {
           function(server_name)
             local server = servers[server_name] or {}
@@ -949,8 +951,19 @@ require('lazy').setup({
     --    - Treesitter + textobjects: https://github.com/nvim-treesitter/nvim-treesitter-textobjects
   },
   -- -- Custom Plugin section
-  -- Vinegar directory browser
-
+  -- Symbol definitions
+  {
+    'stevearc/aerial.nvim',
+    opts = {},
+    dependencies = {
+      'nvim-treesitter/nvim-treesitter',
+      'nvim-tree/nvim-web-devicons',
+    },
+    config = function()
+      require('aerial').setup()
+      vim.keymap.set('n', '<leader>S', '<cmd>AerialToggle!<CR>', { desc = 'Toggle Aerial (symbols)' })
+    end,
+  },
   -- Tabline
   {
     'kdheepak/tabline.nvim',
