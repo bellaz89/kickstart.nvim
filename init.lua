@@ -110,13 +110,72 @@ vim.opt.mouse = 'a'
 -- Don't show the mode, since it's already in the status line
 vim.opt.showmode = false
 
--- Sync clipboard between OS and Neovim.
---  Schedule the setting after `UiEnter` because it can increase startup-time.
---  Remove this option if you want your OS clipboard to remain independent.
---  See `:help 'clipboard'`
-vim.schedule(function()
-  vim.opt.clipboard = 'unnamedplus'
-end)
+-- 🔒 Block OSC52 so deletes/changes don't ping the terminal clipboard path
+vim.g.termfeatures = vim.g.termfeatures or {}
+vim.g.termfeatures.osc52 = false
+
+-- Helpers
+local function has(cmd)
+  return vim.fn.executable(cmd) == 1
+end
+
+local env = vim.fn.environ()
+local is_wsl = (vim.fn.has 'wsl' == 1)
+local on_wayland = env.WAYLAND_DISPLAY ~= nil
+local on_x = env.DISPLAY ~= nil
+
+-- Decide clipboard provider (Wayland → X11 → WSL clip.exe)
+local function set_clipboard()
+  if on_wayland and has 'wl-copy' and has 'wl-paste' then
+    vim.g.clipboard = {
+      name = 'wl-clipboard',
+      copy = { ['+'] = { 'wl-copy', '--foreground', '--type', 'text/plain' }, ['*'] = { 'wl-copy', '--foreground', '--type', 'text/plain' } },
+      paste = { ['+'] = { 'wl-paste', '--no-newline' }, ['*'] = { 'wl-paste', '--no-newline' } },
+      cache_enabled = 0,
+    }
+    return
+  end
+
+  if on_x and has 'xclip' then
+    vim.g.clipboard = {
+      name = 'xclip',
+      copy = { ['+'] = { 'xclip', '-selection', 'clipboard', '-in' }, ['*'] = { 'xclip', '-selection', 'primary', '-in' } },
+      paste = { ['+'] = { 'xclip', '-selection', 'clipboard', '-out' }, ['*'] = { 'xclip', '-selection', 'primary', '-out' } },
+      cache_enabled = 0,
+    }
+    return
+  end
+
+  if on_x and has 'xsel' then
+    vim.g.clipboard = {
+      name = 'xsel',
+      copy = { ['+'] = { 'xsel', '--clipboard', '--input' }, ['*'] = { 'xsel', '--primary', '--input' } },
+      paste = { ['+'] = { 'xsel', '--clipboard', '--output' }, ['*'] = { 'xsel', '--primary', '--output' } },
+      cache_enabled = 0,
+    }
+    return
+  end
+
+  if is_wsl then
+    -- Works even without GUI under WSL
+    local clip = has 'clip.exe' and 'clip.exe' or '/mnt/c/Windows/System32/clip.exe'
+    vim.g.clipboard = {
+      name = 'WslClipboard',
+      copy = { ['+'] = { clip }, ['*'] = { clip } },
+      paste = {
+        ['+'] = { 'powershell.exe', '-NoProfile', '-Command', 'Get-Clipboard -Raw' },
+        ['*'] = { 'powershell.exe', '-NoProfile', '-Command', 'Get-Clipboard -Raw' },
+      },
+      cache_enabled = 0,
+    }
+    return
+  end
+
+  -- Final fallback: disable provider (still can use "+ register manually)
+  vim.g.clipboard = nil
+end
+
+set_clipboard()
 
 -- Enable break indent
 vim.opt.breakindent = true
