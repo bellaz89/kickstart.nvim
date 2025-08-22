@@ -1104,6 +1104,31 @@ require('lazy').setup({
       { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
     },
   },
+  -- Debug with vimspector
+  {
+    'puremourning/vimspector',
+    cmd = {
+      'VimspectorInstall',
+      'VimspectorUpdate',
+    },
+
+    fn = { 'vimspector#Launch()', 'vimspector#ToggleBreakpoint', 'vimspector#Continue' },
+    config = function()
+      -- quality-of-life mappings (change <leader>d if you like)
+      local map = vim.keymap.set
+      map('n', '<leader>dd', '<cmd>call vimspector#Launch()<cr>', { desc = 'Vimspector: Launch' })
+      map('n', '<leader>dq', '<cmd>VimspectorReset<cr>', { desc = 'Vimspector: Reset' })
+      map('n', '<leader>dc', '<cmd>call vimspector#Continue()<cr>', { desc = 'Vimspector: Continue' })
+      map('n', '<leader>dp', '<cmd>call vimspector#Pause()<cr>', { desc = 'Vimspector: Pause' })
+      map('n', '<leader>do', '<cmd>call vimspector#StepOver()<cr>', { desc = 'Vimspector: Step over' })
+      map('n', '<leader>di', '<cmd>call vimspector#StepInto()<cr>', { desc = 'Vimspector: Step into' })
+      map('n', '<leader>du', '<cmd>call vimspector#StepOut()<cr>', { desc = 'Vimspector: Step out' })
+      map('n', '<leader>db', '<cmd>call vimspector#ToggleBreakpoint()<cr>', { desc = 'Toggle breakpoint' })
+      map('n', '<leader>dB', '<cmd>call vimspector#AddFunctionBreakpoint()<cr>', { desc = 'Func breakpoint' })
+      map('n', '<leader>dw', "<cmd>call vimspector#Watch(expand('<cexpr>'))<cr>", { desc = 'Watch <cexpr>' })
+    end,
+  },
+
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1113,7 +1138,7 @@ require('lazy').setup({
   --  Here are some example plugins that I've included in the Kickstart repository.
   --  Uncomment any of the lines below to enable them (you will need to restart nvim).
   --
-  require 'kickstart.plugins.debug',
+  --  require 'kickstart.plugins.debug',
   require 'kickstart.plugins.indent_line',
   require 'kickstart.plugins.lint',
   require 'kickstart.plugins.autopairs',
