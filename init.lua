@@ -126,11 +126,16 @@ local on_x = env.DISPLAY ~= nil
 
 -- Decide clipboard provider (Wayland → X11 → WSL clip.exe)
 local function set_clipboard()
-  if on_wayland and has 'wl-copy' and has 'wl-paste' then
+  if is_wsl then
+    -- Works even without GUI under WSL
+    local clip = has 'clip.exe' and 'clip.exe' or '/mnt/c/Windows/System32/clip.exe'
     vim.g.clipboard = {
-      name = 'wl-clipboard',
-      copy = { ['+'] = { 'wl-copy', '--foreground', '--type', 'text/plain' }, ['*'] = { 'wl-copy', '--foreground', '--type', 'text/plain' } },
-      paste = { ['+'] = { 'wl-paste', '--no-newline' }, ['*'] = { 'wl-paste', '--no-newline' } },
+      name = 'WslClipboard',
+      copy = { ['+'] = { clip }, ['*'] = { clip } },
+      paste = {
+        ['+'] = { 'powershell.exe', '-NoProfile', '-Command', 'Get-Clipboard -Raw' },
+        ['*'] = { 'powershell.exe', '-NoProfile', '-Command', 'Get-Clipboard -Raw' },
+      },
       cache_enabled = 0,
     }
     return
@@ -156,16 +161,11 @@ local function set_clipboard()
     return
   end
 
-  if is_wsl then
-    -- Works even without GUI under WSL
-    local clip = has 'clip.exe' and 'clip.exe' or '/mnt/c/Windows/System32/clip.exe'
+  if on_wayland and has 'wl-copy' and has 'wl-paste' then
     vim.g.clipboard = {
-      name = 'WslClipboard',
-      copy = { ['+'] = { clip }, ['*'] = { clip } },
-      paste = {
-        ['+'] = { 'powershell.exe', '-NoProfile', '-Command', 'Get-Clipboard -Raw' },
-        ['*'] = { 'powershell.exe', '-NoProfile', '-Command', 'Get-Clipboard -Raw' },
-      },
+      name = 'wl-clipboard',
+      copy = { ['+'] = { 'wl-copy', '--foreground', '--type', 'text/plain' }, ['*'] = { 'wl-copy', '--foreground', '--type', 'text/plain' } },
+      paste = { ['+'] = { 'wl-paste', '--no-newline' }, ['*'] = { 'wl-paste', '--no-newline' } },
       cache_enabled = 0,
     }
     return
