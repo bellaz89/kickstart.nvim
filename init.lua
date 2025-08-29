@@ -911,6 +911,11 @@ require('lazy').setup({
       -- Like many other themes, this one has different styles, and you could load
       -- any other, such as 'tokyonight-storm', 'tokyonight-moon', or 'tokyonight-day'.
       vim.cmd.colorscheme 'molokai'
+      vim.cmd [[
+        hi Normal ctermbg=NONE guibg=NONE
+        hi NonText ctermbg=NONE guibg=NONE
+        hi NormalNC ctermbg=NONE guibg=NONE
+      ]]
 
       -- You can configure highlights by doing something like:
       vim.cmd.hi 'Comment gui=none'

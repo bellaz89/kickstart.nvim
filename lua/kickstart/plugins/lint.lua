@@ -11,7 +11,7 @@ return {
         -- cpp = { 'cppcheck', 'clangtidy' },
         -- c = { 'cppcheck', 'clangtidy' },
         lua = { 'luacheck' },
-        python = { 'flake8' },
+        python = { 'pylint' },
         bash = { 'bash' },
         json = { 'jsonlint' },
         rst = { 'vale' },
