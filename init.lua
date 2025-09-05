@@ -1155,3 +1155,4 @@ vim.opt.tabstop = 2 -- Number of visual spaces per TAB
 vim.opt.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
 vim.opt.expandtab = true -- Convert tabs to spaces
 vim.lsp.set_log_level 'debug'
+vim.opt.colorcolumn = '84'
