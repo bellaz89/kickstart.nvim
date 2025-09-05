@@ -521,7 +521,7 @@ require('lazy').setup({
       --    function will be executed to configure the current buffer
 
       require('lspconfig').clangd.setup {
-        cmd = { 'clangd', '--clang-tidy', '--enable=config', '--pretty' }, -- Enables clang-tidy diagnostics
+        cmd = { 'clangd', '--clang-tidy', '--enable-config', '--pretty' }, -- Enables clang-tidy diagnostics
         init_options = {
           clangdFileStatus = true, -- Shows status in LSP info
           fallbackFlags = { '-std=c++17' }, -- Optional: fallback flags
@@ -1154,5 +1154,16 @@ vim.cmd 'autocmd BufRead,BufNewFile *.rdl set filetype=systemrdl'
 vim.opt.tabstop = 2 -- Number of visual spaces per TAB
 vim.opt.shiftwidth = 2 -- Number of spaces to use for each step of (auto)indent
 vim.opt.expandtab = true -- Convert tabs to spaces
-vim.lsp.set_log_level 'debug'
+-- vim.lsp.set_log_level 'debug'
 vim.opt.colorcolumn = '84'
+
+-- Auto-apply clangd quick fixes on save for C/C++
+vim.api.nvim_create_autocmd('BufWritePre', {
+  pattern = { '*.c', '*.cc', '*.cpp', '*.cxx', '*.h', '*.hh', '*.hpp', '*.hxx', '*.ixx' },
+  callback = function()
+    vim.lsp.buf.code_action {
+      context = { only = { 'quickfix' } },
+      apply = true, -- Neovim 0.10+
+    }
+  end,
+})
