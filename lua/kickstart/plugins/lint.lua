@@ -25,7 +25,6 @@ return {
       local cppcheck = lint.linters.cppcheck
       cppcheck.args = {
         '--enable=all',
-        '--std=c++17',
         '--template=gcc',
         '--suppress=unusedFunction',
         '--suppress=missingIncludeSystem',
