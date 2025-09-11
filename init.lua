@@ -520,12 +520,28 @@ require('lazy').setup({
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
       --    function will be executed to configure the current buffer
 
+      -- enable clangd by default
       require('lspconfig').clangd.setup {
         cmd = { 'clangd', '--clang-tidy', '--enable=config', '--pretty' }, -- Enables clang-tidy diagnostics
         init_options = {
           clangdFileStatus = true, -- Shows status in LSP info
           fallbackFlags = { '-std=c++17' }, -- Optional: fallback flags
         },
+      }
+
+      -- enable ruff by default
+      require('lspconfig').ruff_lsp.setup {
+
+        init_options = {
+          settings = {
+            -- Enforce annotations on types
+            args = { '--select=ANN', '--ignore=ANN101,ANN102' },
+          },
+        },
+
+        on_attach = function(client, bufnr)
+          client.server_capabilities.hoverProvider = false
+        end,
       }
 
       vim.api.nvim_create_autocmd('LspAttach', {
