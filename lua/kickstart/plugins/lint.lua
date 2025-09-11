@@ -8,8 +8,6 @@ return {
       lint.linters_by_ft = {
         markdown = { 'markdownlint' },
         vhdl = { 'vsg' },
-        -- cpp = { 'cppcheck', 'clangtidy' },
-        -- c = { 'cppcheck', 'clangtidy' },
         lua = { 'luacheck' },
         python = { 'pylint' },
         bash = { 'bash' },
