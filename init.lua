@@ -1,4 +1,6 @@
 --[[
+--
+--
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -519,6 +521,9 @@ require('lazy').setup({
       --    That is to say, every time a new file is opened that is associated with
       --    an lsp (for example, opening `main.rs` is associated with `rust_analyzer`) this
       --    function will be executed to configure the current buffer
+      --
+      local capabilities = vim.lsp.protocol.make_client_capabilities()
+      capabilities.textDocument.codeAction = nil -- completely remove support
 
       require('lspconfig').clangd.setup {
         cmd = { 'clangd', '--clang-tidy', '--enable-config', '--pretty' }, -- Enables clang-tidy diagnostics
@@ -526,6 +531,13 @@ require('lazy').setup({
           clangdFileStatus = true, -- Shows status in LSP info
           fallbackFlags = { '-std=c++17' }, -- Optional: fallback flags
         },
+        capabilities = capabilities,
+      }
+
+      require('lspconfig').opencl_ls.setup {
+        cmd = { 'opencl-language-server' },
+        cmd_env = { OCL_ICD_VENDORS = '/usr/share/OpenCL/vendors' },
+        init_options = { configuration = { deviceID = 0 } },
       }
 
       vim.api.nvim_create_autocmd('LspAttach', {
