@@ -525,6 +525,7 @@ require('lazy').setup({
       local capabilities = vim.lsp.protocol.make_client_capabilities()
       capabilities.textDocument.codeAction = nil -- completely remove support
 
+      -- enable clangd by default
       require('lspconfig').clangd.setup {
         cmd = { 'clangd', '--clang-tidy', '--enable-config', '--pretty' }, -- Enables clang-tidy diagnostics
         init_options = {
@@ -538,6 +539,21 @@ require('lazy').setup({
         cmd = { 'opencl-language-server' },
         cmd_env = { OCL_ICD_VENDORS = '/usr/share/OpenCL/vendors' },
         init_options = { configuration = { deviceID = 0 } },
+      }
+
+      -- enable ruff by default
+      require('lspconfig').ruff.setup {
+
+        init_options = {
+          settings = {
+            -- Enforce annotations on types
+            args = { '--select=ANN', '--ignore=ANN101,ANN102' },
+          },
+        },
+
+        on_attach = function(client, bufnr)
+          client.server_capabilities.hoverProvider = false
+        end,
       }
 
       vim.api.nvim_create_autocmd('LspAttach', {
@@ -760,7 +776,6 @@ require('lazy').setup({
         -- Disable "format_on_save lsp_fallback" for languages that don't
         -- have a well standardized coding style. You can add additional
         -- languages here or re-enable it for the disabled ones.
-
         local disable_filetypes = { c = true, cpp = true }
         local lsp_format_opt
         if disable_filetypes[vim.bo[bufnr].filetype] then
@@ -786,6 +801,7 @@ require('lazy').setup({
         rst = { 'rstfmt' },
         yaml = { 'yamlfix' },
         xml = { 'xmlformatter' },
+        opencl = { 'clang-format' },
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -797,32 +813,32 @@ require('lazy').setup({
     event = 'InsertEnter',
     dependencies = {
       -- Snippet Engine & its associated nvim-cmp source
-      {
-        'L3MON4D3/LuaSnip',
-        exclude = { 'vhdl' },
-        build = (function()
-          -- Build Step is needed for regex support in snippets.
-          -- This step is not supported in many windows environments.
-          -- Remove the below condition to re-enable on windows.
-          if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
-            return
-          end
-          return 'make install_jsregexp'
-        end)(),
-        dependencies = {
-          -- `vim-snippets` contains a variety of premade snippets in snipMate format.
-          --  See the README about individual language/framework/plugin snippets:
-          --  https://github.com/honza/vim-snippets/
-          {
-            'honza/vim-snippets',
-            config = function()
-              require('luasnip.loaders.from_snipmate').lazy_load()
-              require('luasnip.loaders.from_snipmate').lazy_load { paths = { './snippets' } }
-            end,
-          },
-        },
-      },
-      'saadparwaiz1/cmp_luasnip',
+      -- {
+      --   'L3MON4D3/LuaSnip',
+      --   exclude = { 'vhdl' },
+      --   build = (function()
+      --     -- Build Step is needed for regex support in snippets.
+      --     -- This step is not supported in many windows environments.
+      --     -- Remove the below condition to re-enable on windows.
+      --     if vim.fn.has 'win32' == 1 or vim.fn.executable 'make' == 0 then
+      --       return
+      --     end
+      --     return 'make install_jsregexp'
+      --   end)(),
+      --   dependencies = {
+      --     -- `vim-snippets` contains a variety of premade snippets in snipMate format.
+      --     --  See the README about individual language/framework/plugin snippets:
+      --     --  https://github.com/honza/vim-snippets/
+      --     {
+      --       'honza/vim-snippets',
+      --       config = function()
+      --         require('luasnip.loaders.from_snipmate').lazy_load()
+      --         require('luasnip.loaders.from_snipmate').lazy_load { paths = { './snippets' } }
+      --       end,
+      --     },
+      --   },
+      -- },
+      -- 'saadparwaiz1/cmp_luasnip',
 
       -- Adds other completion capabilities.
       --  nvim-cmp does not ship with all sources by default. They are split
@@ -833,15 +849,15 @@ require('lazy').setup({
     config = function()
       -- See `:help cmp`
       local cmp = require 'cmp'
-      local luasnip = require 'luasnip'
-      luasnip.config.setup {}
+      -- local luasnip = require 'luasnip'
+      -- luasnip.config.setup {}
 
       cmp.setup {
-        snippet = {
-          expand = function(args)
-            luasnip.lsp_expand(args.body)
-          end,
-        },
+        -- snippet = {
+        --   expand = function(args)
+        --     luasnip.lsp_expand(args.body)
+        --   end,
+        -- },
         completion = { completeopt = 'menu,menuone,noinsert' },
 
         -- For an understanding of why these mappings were
@@ -882,16 +898,16 @@ require('lazy').setup({
           --
           -- <c-u> will move you to the right of the expansion locations.
           -- <c-b> is similar, except moving you backwards.
-          ['<C-u>'] = cmp.mapping(function()
-            if luasnip.expand_or_locally_jumpable() then
-              luasnip.expand_or_jump()
-            end
-          end, { 'i', 's' }),
-          ['<C-o>'] = cmp.mapping(function()
-            if luasnip.locally_jumpable(-1) then
-              luasnip.jump(-1)
-            end
-          end, { 'i', 's' }),
+          -- ['<C-u>'] = cmp.mapping(function()
+          --   if luasnip.expand_or_locally_jumpable() then
+          --     luasnip.expand_or_jump()
+          --   end
+          -- end, { 'i', 's' }),
+          -- ['<C-o>'] = cmp.mapping(function()
+          --   if luasnip.locally_jumpable(-1) then
+          --     luasnip.jump(-1)
+          --   end
+          -- end, { 'i', 's' }),
 
           -- For more advanced Luasnip keymaps (e.g. selecting choice nodes, expansion) see:
           --    https://github.com/L3MON4D3/LuaSnip?tab=readme-ov-file#keymaps
@@ -903,7 +919,7 @@ require('lazy').setup({
             group_index = 0,
           },
           { name = 'nvim_lsp' },
-          { name = 'luasnip' },
+          -- { name = 'luasnip' },
           { name = 'path' },
         },
       }
@@ -1179,3 +1195,9 @@ vim.api.nvim_create_autocmd('BufWritePre', {
     }
   end,
 })
+
+vim.filetype.add {
+  extension = {
+    cl = 'opencl',
+  },
+}
