@@ -124,16 +124,7 @@ if vim.fn.executable 'powershell.exe' == 1 then
   -- 🔒 Block OSC52 so deletes/changes don't ping the terminal clipboard path
   vim.g.termfeatures = vim.g.termfeatures or {}
   vim.g.termfeatures.osc52 = false
-
-  vim.g.clipboard = {
-    name = 'WslClipboard',
-    copy = { ['+'] = { 'clip.exe' }, ['*'] = { 'clip.exe' } },
-    paste = {
-      ['+'] = { 'powershell.exe', '-NoProfile', '-Command', 'Get-Clipboard -Raw' },
-      ['*'] = { 'powershell.exe', '-NoProfile', '-Command', 'Get-Clipboard -Raw' },
-    },
-    cache_enabled = 0,
-  }
+  vim.g.clipboard = false
 end
 
 -- Enable break indent
