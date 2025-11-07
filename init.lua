@@ -521,7 +521,6 @@ require('lazy').setup({
         cmd = { 'clangd', '--clang-tidy', '--enable-config', '--pretty' }, -- Enables clang-tidy diagnostics
         init_options = {
           clangdFileStatus = true, -- Shows status in LSP info
-          fallbackFlags = { '-std=c++17' }, -- Optional: fallback flags
         },
         capabilities = capabilities,
       }
