@@ -269,6 +269,8 @@ require('lazy').setup({
     },
   },
 
+  'lervag/vimtex',
+
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -557,6 +559,19 @@ require('lazy').setup({
         },
       }
 
+      -- configuration for kotlin-lsp
+      vim.lsp.config('kotlin_lsp', {
+        root_markers = {
+          'settings.gradle',
+          'settings.gradle.kts',
+          'pom.xml',
+          'build.gradle',
+          'build.gradle.kts',
+          'workspace.json',
+          'module.yaml', --Added from default configuration
+        },
+      })
+
       vim.api.nvim_create_autocmd('LspAttach', {
         group = vim.api.nvim_create_augroup('kickstart-lsp-attach', { clear = true }),
         callback = function(event)
@@ -803,6 +818,8 @@ require('lazy').setup({
         yaml = { 'yamlfix' },
         xml = { 'xmlformatter' },
         opencl = { 'clang-format' },
+        kotlin = { 'ktfmt' },
+
         --
         -- You can use 'stop_after_first' to run the first available formatter from the list
         -- javascript = { "prettierd", "prettier", stop_after_first = true },
@@ -1202,3 +1219,7 @@ vim.filetype.add {
     cl = 'opencl',
   },
 }
+
+require('lspconfig').texlab.setup {}
+
+vim.cmd [[autocmd FileType tex setlocal spell]]
