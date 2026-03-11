@@ -1,6 +1,4 @@
 --[[
---
---
 =====================================================================
 ==================== READ THIS BEFORE CONTINUING ====================
 =====================================================================
@@ -269,8 +267,6 @@ require('lazy').setup({
     },
   },
 
-  'lervag/vimtex',
-
   -- NOTE: Plugins can also be configured to run Lua code when they are loaded.
   --
   -- This is often very useful to both group configuration, as well as handle
@@ -519,37 +515,41 @@ require('lazy').setup({
       capabilities.textDocument.codeAction = nil -- completely remove support
 
       -- enable clangd by default
-      require('lspconfig').clangd.setup {
+      vim.lsp.config('clangd', {
         cmd = { 'clangd', '--clang-tidy', '--enable-config', '--pretty' }, -- Enables clang-tidy diagnostics
         init_options = {
           clangdFileStatus = true, -- Shows status in LSP info
         },
         capabilities = capabilities,
-      }
+      })
+      vim.lsp.enable 'clangd'
 
-      require('lspconfig').opencl_ls.setup {
+      -- OpenCL language server
+      vim.lsp.config('opencl_ls', {
         cmd = { 'opencl-language-server' },
         cmd_env = { OCL_ICD_VENDORS = '/usr/share/OpenCL/vendors' },
         init_options = { configuration = { deviceID = 0 } },
-      }
+        capabilities = capabilities,
+      })
+      vim.lsp.enable 'opencl_ls'
 
       -- enable ruff by default
-      require('lspconfig').ruff.setup {
-
+      vim.lsp.config('ruff', {
         init_options = {
           settings = {
             -- Enforce annotations on types
             args = { '--select=ANN', '--ignore=ANN101,ANN102' },
           },
         },
-
         on_attach = function(client, bufnr)
           client.server_capabilities.hoverProvider = false
         end,
-      }
+        capabilities = capabilities,
+      })
+      vim.lsp.enable 'ruff'
 
-      -- enable mypy by default
-      require('lspconfig').pylsp.setup {
+      -- enable pylsp with mypy plugin
+      vim.lsp.config('pylsp', {
         settings = {
           pylsp = {
             plugins = {
@@ -557,7 +557,9 @@ require('lazy').setup({
             },
           },
         },
-      }
+        capabilities = capabilities,
+      })
+      vim.lsp.enable 'pylsp'
 
       -- configuration for kotlin-lsp
       vim.lsp.config('kotlin_lsp', {
@@ -734,6 +736,8 @@ require('lazy').setup({
             },
           },
         },
+
+        texlab = {},
       }
 
       -- Ensure the servers and tools above are installed
@@ -1137,6 +1141,28 @@ require('lazy').setup({
       }
     end,
   },
+
+  {
+    'lervag/vimtex',
+    lazy = false,
+    init = function()
+      vim.g.vimtex_view_method = 'zathura'
+      vim.g.vimtex_compiler_method = 'latexmk'
+
+      vim.g.vimtex_compiler_latexmk = {
+        executable = 'latexmk',
+        options = {
+          '-pdf',
+          '-interaction=nonstopmode',
+          '-synctex=1',
+          '-file-line-error',
+        },
+      }
+
+      vim.g.vimtex_quickfix_mode = 0
+    end,
+  },
+
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1164,6 +1190,9 @@ require('lazy').setup({
   -- In normal mode type `<space>sh` then write `lazy.nvim-plugin`
   -- you can continue same window with `<space>sr` which resumes last telescope search
 }, {
+  rocks = {
+    enabled = false, -- Fix Lua 5.1 / luarocks error
+  },
   ui = {
     -- If you are using a Nerd Font: set icons to an empty table which will use the
     -- default lazy.nvim defined Nerd Font icons, otherwise define a unicode icons table
@@ -1228,11 +1257,9 @@ vim.filetype.add {
   },
 }
 
-require('lspconfig').texlab.setup {}
-
 vim.cmd [[autocmd FileType tex setlocal spell]]
 
-local gp = require 'gp'
+pcall(require, 'gp')
 
 vim.keymap.set('n', '<leader>ai', ':GpChat<CR>')
 vim.keymap.set('v', '<leader>ar', ':GpRewrite<CR>')
