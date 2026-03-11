@@ -1129,6 +1129,14 @@ require('lazy').setup({
       { '<c-\\>', '<cmd><C-U>TmuxNavigatePrevious<cr>' },
     },
   },
+  {
+    'Robitx/gp.nvim',
+    config = function()
+      require('gp').setup {
+        openai_api_key = os.getenv 'OPENAI_API_KEY',
+      }
+    end,
+  },
   -- The following comments only work if you have downloaded the kickstart repo, not just copy pasted the
   -- init.lua. If you want these files, they are in the repository, so you can just download them and
   -- place them in the correct locations.
@@ -1223,3 +1231,10 @@ vim.filetype.add {
 require('lspconfig').texlab.setup {}
 
 vim.cmd [[autocmd FileType tex setlocal spell]]
+
+local gp = require 'gp'
+
+vim.keymap.set('n', '<leader>ai', ':GpChat<CR>')
+vim.keymap.set('v', '<leader>ar', ':GpRewrite<CR>')
+vim.keymap.set('v', '<leader>ae', ':GpExplain<CR>')
+vim.keymap.set('v', '<leader>aa', ':GpAppend<CR>')
